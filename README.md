@@ -2,6 +2,7 @@ phpLintBash
 ===========
 
 A quick bash script to recursively lint PHP files in a given directory.
+Nice to use as part of a testing stragegy for CI, or after doing an epic merge.
 
 #### Returns:
 * Number of Files linted
