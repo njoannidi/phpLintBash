@@ -46,4 +46,6 @@ Lint all files recursively of specified directory
  * Exit 1
  * Output on stderr
 
-### Requires: PHP
+### Requires: 
+* PHP
+* Bash
