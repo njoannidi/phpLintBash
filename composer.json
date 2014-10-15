@@ -1,0 +1,7 @@
+{
+    "name": "njoannidi/bashPhpLint",
+    "description": "A short bash script to recursively lint PHP files with a nice output",
+    "require": {
+        "php": "*"
+    }
+}
