@@ -1,0 +1,95 @@
+#!/bin/bash
+# Requires: PHP
+
+# Usage:
+# 
+# ./phpLint
+# 
+# Lint all files recursively in defaultDir 
+ 	
+defaultDir='./assets/php'
+
+# ./phpLint [directory]
+# 
+# Lint all files recursively of specified directory
+
+# Overview:
+#   
+# - Will return a pass / fail
+# - Will only pass if all files pass
+# - Any errors will be output in addition to the file they were found in
+
+# Scope:
+# 	- This is a syntax checker. It will not run methods and check for correct returns
+# 	- It is not a static analysis tool. Code quality / specs are not enforced or searched for
+
+# Caveats and Best Practice:
+# 	- The nature of PHP's lint operation is to abort linting of a file once an error has been found, so...
+# 		- If a file has multiple errors you will only be notified of the first error
+# 		- Run until you're error-free
+# 		- Although linting of the current file may have stopped due to a syntax error,
+# 			linting of any remaining files in the queue will continue.
+
+# Scripting / Deployment Usage:
+# 	- This will return proper exit codes so it can be used for scripting deployments, etc.
+# 		- Pass
+# 			- Exit 0 (clean)
+# 			- Output on stdin
+# 		- Fail
+# 			- Exit 1
+# 			- Output on stderr
+ 
+# Colors
+green='\e[32m' 
+red='\e[31m' 
+yellow='\e[93m' 
+
+# Styles
+underline='\e[4m'
+
+# End color/style
+endColor='\e[0m' 
+
+# Commandline Argument support
+if [[ ${#1} > 0 ]]; then
+	searchDir=${1}
+else
+	searchDir=${defaultDir}
+fi
+
+echo -e "\n${underline}Linting PHP in: ${yellow}${searchDir}${endColor}\n"
+
+# Initial Counts
+filesFailed=0
+filesPassed=0
+filesChecked=0
+ 
+for entry in `find ${searchDir} -name '*.php'` 
+do
+	# May want to add support for specifying PHP path
+	# Tosses out regular output, we only care about errors.
+	currLint=`php -l $entry 2>&1 1>/dev/null`
+	if [[ ${#currLint} == 0 ]]; then
+		((filesPassed++))
+	else
+		echo -e "${red}Failed: ${yellow}${entry}${endColor}"
+		echo -e "${currLint}\n"
+		((filesFailed++))
+	fi
+	((filesChecked++))
+done
+
+echo -e "${filesChecked} Checked"
+echo -e "${filesPassed} Passed"
+echo -e "${filesFailed} Failed"
+
+# Output a nice Pass / Fail
+if [[ ${filesFailed} > 0 ]]; then
+	>&2 echo -e "\n${red}Fail${endColor}\n"
+	exit 1
+else
+	echo -e "\n${green}Pass${endColor}\n"
+	exit 0
+fi
+
+${normalStyle}
