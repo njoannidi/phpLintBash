@@ -1,5 +1,5 @@
 {
-    "name": "njoannidi/bash-php-lint",
+    "name": "njoannidi/php-lint-bash",
     "description": "A short bash script to recursively lint PHP files with a nice output",
     "require": {
         "php": "*"
