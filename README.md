@@ -49,4 +49,4 @@ Lint all files recursively of specified directory
 
 #### Requires: 
 * PHP
-* Bash
+* /bin/sh
