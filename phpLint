@@ -1,20 +1,20 @@
-#!/bin/bash
+#!/bin/sh
 # Requires: PHP
 
 # Usage:
-# 
+#
 # ./phpLint
-# 
-# Lint all files recursively in defaultDir 
- 	
+#
+# Lint all files recursively in defaultDir
+
 defaultDir='./'
 
 # ./phpLint [directory]
-# 
+#
 # Lint all files recursively of specified directory
 
 # Overview:
-#   
+#
 # - Will return a pass / fail
 # - Will only pass if all files pass
 # - Any errors will be output in addition to the file they were found in
@@ -38,20 +38,20 @@ defaultDir='./'
 # 		- Fail
 # 			- Exit 1
 # 			- Output on stderr
- 
+
 # Colors
-green='\e[32m' 
-red='\e[31m' 
-yellow='\e[93m' 
+green='\e[32m'
+red='\e[31m'
+yellow='\e[93m'
 
 # Styles
 underline='\e[4m'
 
 # End color/style
-endColor='\e[0m' 
+endColor='\e[0m'
 
 # Commandline Argument support
-if [[ ${#1} > 0 ]]; then
+if [[ ${#1} -gt 0 ]]; then
 	searchDir=${1}
 else
 	searchDir=${defaultDir}
@@ -63,20 +63,20 @@ echo -e "\n${underline}Linting PHP in: ${yellow}${searchDir}${endColor}\n"
 filesFailed=0
 filesPassed=0
 filesChecked=0
- 
-for entry in `find ${searchDir} -name '*.php'` 
+
+for entry in `find ${searchDir} -name '*.php'`
 do
 	# May want to add support for specifying PHP path
 	# Tosses out regular output, we only care about errors.
 	currLint=`php -l $entry 2>&1 1>/dev/null`
 	if [[ ${#currLint} == 0 ]]; then
-		((filesPassed++))
+		_=$((filesPassed++))
 	else
 		echo -e "${red}Failed: ${yellow}${entry}${endColor}"
 		echo -e "${currLint}\n"
-		((filesFailed++))
+		_=$((filesFailed++))
 	fi
-	((filesChecked++))
+	_=$((filesChecked++))
 done
 
 echo -e "${filesChecked} Checked"
@@ -84,7 +84,7 @@ echo -e "${filesPassed} Passed"
 echo -e "${filesFailed} Failed"
 
 # Output a nice Pass / Fail
-if [[ ${filesFailed} > 0 ]]; then
+if [[ ${filesFailed} -gt 0 ]]; then
 	>&2 echo -e "\n${red}Fail${endColor}\n"
 	exit 1
 else
